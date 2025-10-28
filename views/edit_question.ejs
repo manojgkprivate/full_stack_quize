@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Question</title>
+    <link rel="stylesheet" href="/css/style.css">
+ </head>
+<body>
+    <nav class="menu-bar">
+        <div class="logo">GameZone</div>
+        <div class="menu-items">
+            <a href="/" class="menu-item">Home</a>
+            <a href="/dashboard" class="menu-item">Dashboard</a>
+            <a href="/account" class="menu-item">Account</a>
+            <a href="/game" class="menu-item">Start Game</a>
+            <a href="/auth/logout" class="menu-item logout">Logout</a>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Edit Question</h1>
+        <div class="account-content">
+            <form action="/account/questions/<%= question._id %>" method="POST" enctype="multipart/form-data">
+                <div class="images-container">
+                    <div class="image-group">
+                        <h3>Image 1</h3>
+                        <div class="preview-container">
+                            <% if (question.image1 && question.image1.data) { %>
+                                <img src="/api/questions/<%= user._id %>/<%= question._id %>/1" class="image-preview" alt="first">
+                            <% } else { %>
+                                <div class="no-image">No Image</div>
+                            <% } %>
+                        </div>
+                        <div class="form-group">
+                            <label for="image1">Replace Image 1 (optional):</label>
+                            <input type="file" id="image1" name="image1" accept="image/*">
+                        </div>
+                    </div>
+                    <div class="image-group">
+                        <h3>Image 2</h3>
+                        <div class="preview-container">
+                            <% if (question.image2 && question.image2.data) { %>
+                                <img src="/api/questions/<%= user._id %>/<%= question._id %>/2" class="image-preview" alt="second">
+                            <% } else { %>
+                                <div class="no-image">No Image</div>
+                            <% } %>
+                        </div>
+                        <div class="form-group">
+                            <label for="image2">Replace Image 2 (optional):</label>
+                            <input type="file" id="image2" name="image2" accept="image/*">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group answer-section">
+                    <label for="answer">Correct Answer:</label>
+                    <input type="text" id="answer" name="answer" value="<%= question.answer %>" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a href="/account" class="btn">Cancel</a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

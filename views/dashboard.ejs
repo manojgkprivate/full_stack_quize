@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="menu-bar">
+        <div class="logo">GameZone</div>
+        <div class="menu-items">
+            <a href="/" class="menu-item">Home</a>
+            <% if (user) { %>
+                <a href="/account" class="menu-item">Account</a>
+                <a href="/dashboard" class="menu-item active">Dashboard</a>
+                <a href="/game" class="menu-item">Start Game</a>
+                <a href="/auth/logout" class="menu-item logout">Logout</a>
+            <% } %>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Dashboard</h1>
+        <% if (user) { %>
+            <div class="welcome-message">
+                <h2>Welcome, <%= user.username %>!</h2>
+            </div>
+        <% } %>
+        <div class="dashboard-content">
+            <h3>Your Gaming Stats</h3>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-label">Games Played</span>
+                    <span class="stat-value">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">High Score</span>
+                    <span class="stat-value">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

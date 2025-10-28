@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Zone</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="menu-bar">
+        <div class="logo">GameZone</div>
+        <div class="menu-items">
+            <a href="/" class="menu-item">Home</a>
+            <a href="/account" class="menu-item">Account</a>
+            <a href="/dashboard" class="menu-item">Dashboard</a>
+            <a href="/game" class="menu-item active">Start Game</a>
+            <a href="/auth/logout" class="menu-item logout">Logout</a>
+        </div>
+    </nav>
+    <div class="container game-container">
+        <h1>Game Zone</h1>
+        <div class="game-area">
+            <div id="game-canvas">
+                <div class="game-message">
+                    <h2>Welcome to the Image Guessing Game!</h2>
+                    <button id="start-game" class="btn btn-game">Start Game</button>
+                </div>
+                <div id="game-content" class="hidden">
+                    <div class="image-pair">
+                        <div class="game-images">
+                            <img id="image1" class="game-image" src="" alt="First Image">
+                            <img id="image2" class="game-image" src="" alt="Second Image">
+                        </div>
+                        <div class="answer-form">
+                            <input type="text" id="user-answer" placeholder="Enter your answer..." class="answer-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="game-controls">
+                <div class="score-section">
+                    <span>Score: <span id="current-score">0</span></span>
+                    <span>High Score: <span id="high-score">0</span></span>
+                </div>
+                <div class="progress-section">
+                    <span>Question <span id="q-number">0</span> of <span id="q-total">0</span></span>
+                </div>
+                <div id="result-message" class="result-message"></div>
+                <button id="submit-answer" class="btn btn-game hidden">Check Answer</button>
+                <button id="next-pair" class="btn btn-game hidden">Next Question</button>
+            </div>
+        </div>
+    </div>
+    <script src="/js/game.js"></script>
+</body>
+</html>

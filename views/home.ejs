@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="menu-bar">
+        <div class="logo">GameZone</div>
+        <div class="menu-items">
+            <a href="/" class="menu-item active">Home</a>
+            <% if (user) { %>
+                <a href="/account" class="menu-item">Account</a>
+                <a href="/dashboard" class="menu-item">Dashboard</a>
+                <a href="/game" class="menu-item">Start Game</a>
+                <a href="/auth/logout" class="menu-item logout">Logout</a>
+            <% } else { %>
+                <a href="/auth/login" class="menu-item">Login</a>
+                <a href="/auth/register" class="menu-item">Register</a>
+                <a href="/game" class="menu-item disabled" title="Please login to play">Start Game</a>
+            <% } %>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Welcome to GameZone</h1>
+        <div class="welcome-content">
+            <p>Login or Register to start playing exciting games!</p>
+        </div>
+    </div>
+</body>
+</html>

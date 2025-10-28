@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="menu-bar">
+        <div class="logo">GameZone</div>
+        <div class="menu-items">
+            <a href="/" class="menu-item">Home</a>
+            <a href="/dashboard" class="menu-item">Dashboard</a>
+            <a href="/account" class="menu-item active">Account</a>
+            <a href="/game" class="menu-item">Start Game</a>
+            <a href="/auth/logout" class="menu-item logout">Logout</a>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Account Settings</h1>
+        <div class="account-content">
+            <div class="user-info">
+                <h2>Profile Information</h2>
+                <p><strong>Username:</strong> <%= user.username %></p>
+                <p><strong>Email:</strong> <%= user.email %></p>
+                <h3>Game History</h3>
+                <% if (user.scores && user.scores.length > 0) { %>
+                    <div class="scores-list">
+                        <% user.scores.sort((a,b) => b.createdAt - a.createdAt).forEach(function(score) { %>
+                            <div class="score-item">
+                                <p>
+                                    <strong>Score:</strong> <%= score.score %> |
+                                    <strong>Correct:</strong> <%= score.correct %>/<%= score.total %> |
+                                    <strong>Time:</strong> <%= Math.floor(score.timeSpentSeconds/60) %>m <%= score.timeSpentSeconds%60 %>s |
+                                    <small><%= new Date(score.createdAt).toLocaleString() %></small>
+                                </p>
+                            </div>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <p>No games played yet.</p>
+                <% } %>
+                <% if (user.highScore) { %>
+                    <p class="high-score"><strong>High Score:</strong> <%= user.highScore %></p>
+                <% } %>
+            </div>
+
+            <div class="questions-list">
+                <h2>Your Questions</h2>
+                <% if (user.questions && user.questions.length) { %>
+                    <ul class="question-items">
+                        <% user.questions.forEach(function(q) { %>
+                            <li class="question-item">
+                                <div class="preview-container small">
+                                    <% if (q.image1 && q.image1.data) { %>
+                                        <img src="/api/questions/<%= user._id %>/<%= q._id %>/1" class="image-preview" alt="1">
+                                    <% } else { %>
+                                        <div class="no-image">No Image</div>
+                                    <% } %>
+                                </div>
+                                <div class="preview-container small">
+                                    <% if (q.image2 && q.image2.data) { %>
+                                        <img src="/api/questions/<%= user._id %>/<%= q._id %>/2" class="image-preview" alt="2">
+                                    <% } else { %>
+                                        <div class="no-image">No Image</div>
+                                    <% } %>
+                                </div>
+                                <div class="question-meta">
+                                    <p><strong>Answer:</strong> <%= q.answer %></p>
+                                    <form action="/account/questions/<%= q._id %>/delete" method="POST" class="inline-form">
+                                        <button type="submit" class="btn btn-logout small-btn">Delete</button>
+                                    </form>
+                                    <a href="/account/questions/<%= q._id %>/edit" class="btn small-btn">Edit</a>
+                                </div>
+                            </li>
+                        <% }); %>
+                    </ul>
+                <% } else { %>
+                    <p>No questions yet. Add one below.</p>
+                <% } %>
+            </div>
+
+            <div class="image-upload-section">
+                <h2>Add New Question</h2>
+                <form id="add-question-form" action="/account/questions" method="POST" enctype="multipart/form-data" class="upload-form">
+                    <div class="images-container">
+                        <div class="image-group">
+                            <h3>Image 1</h3>
+                            <div class="preview-container">
+                                <div class="no-image">Preview</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="image1">Upload Image:</label>
+                                <input type="file" id="image1" name="image1" accept="image/*" required>
+                            </div>
+                        </div>
+
+                        <div class="image-group">
+                            <h3>Image 2</h3>
+                            <div class="preview-container">
+                                <div class="no-image">Preview</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="image2">Upload Image:</label>
+                                <input type="file" id="image2" name="image2" accept="image/*" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group answer-section">
+                        <label for="answer">Correct Answer:</label>
+                        <input type="text" id="answer" name="answer" required placeholder="Enter the correct answer for both images">
+                        <small class="help-text">This answer will be used to verify both images</small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Add Question</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Preview images before upload
+        function previewImage(input, previewContainer) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'image-preview';
+                    previewContainer.innerHTML = '';
+                    previewContainer.appendChild(img);
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        document.getElementById('image1').addEventListener('change', function() {
+            previewImage(this, this.parentElement.parentElement.querySelector('.preview-container'));
+        });
+
+        document.getElementById('image2').addEventListener('change', function() {
+            previewImage(this, this.parentElement.parentElement.querySelector('.preview-container'));
+        });
+    </script>
+</body>
+</html>
