@@ -60,8 +60,8 @@ router.post('/login', async (req, res) => {
             id: user._id,
             username: user.username
         };
-        
-        res.redirect('/dashboard');
+        // Redirect to home page after login
+        res.redirect('/');
     } catch (err) {
         console.error(err);
         res.render('login', { error: 'Server error' });

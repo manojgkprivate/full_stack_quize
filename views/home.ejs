@@ -3,31 +3,618 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <title>Welcome to GameZone</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS Variables for consistent theming */
+        :root {
+            --primary: #6c5ce7;
+            --primary-dark: #5649c0;
+            --secondary: #fd79a8;
+            --accent: #00cec9;
+            --dark: #2d3436;
+            --light: #f7f7f7;
+            --gray: #636e72;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #e17055;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --border-radius: 12px;
+            --gradient: linear-gradient(135deg, var(--primary), var(--accent));
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background Elements */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(108, 92, 231, 0.1);
+            animation: float 15s infinite ease-in-out;
+        }
+
+        .bg-circle:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .bg-circle:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 60%;
+            left: 80%;
+            animation-delay: 2s;
+        }
+
+        .bg-circle:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            top: 30%;
+            left: 70%;
+            animation-delay: 4s;
+        }
+
+        .bg-circle:nth-child(4) {
+            width: 250px;
+            height: 250px;
+            top: 70%;
+            left: 10%;
+            animation-delay: 6s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translateY(-20px) scale(1.05);
+                opacity: 0.9;
+            }
+        }
+
+        /* Navigation Styles */
+        .menu-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: rgba(45, 52, 54, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: var(--transition);
+        }
+
+        .logo:hover::before {
+            left: 100%;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+        }
+
+        .menu-items {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .menu-item, .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .menu-item {
+            color: var(--light);
+            background: transparent;
+            border: 1px solid transparent;
+        }
+
+        .menu-item:hover {
+            color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .menu-item.active {
+            color: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(0, 206, 201, 0.3);
+        }
+
+        .menu-item.logout {
+            color: var(--danger);
+        }
+
+        .menu-item.logout:hover {
+            background: rgba(225, 112, 85, 0.1);
+        }
+
+        .menu-item.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.5);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: var(--transition);
+        }
+
+        .btn:hover::after {
+            left: 100%;
+        }
+
+        /* Main Content Styles */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, var(--primary), var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: textGlow 3s ease-in-out infinite alternate;
+            position: relative;
+        }
+
+        @keyframes textGlow {
+            0% {
+                text-shadow: 0 0 10px rgba(108, 92, 231, 0.5);
+            }
+            100% {
+                text-shadow: 0 0 20px rgba(0, 206, 201, 0.7), 0 0 30px rgba(108, 92, 231, 0.5);
+            }
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        .welcome-content {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .welcome-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .welcome-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient);
+        }
+
+        .welcome-content p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .home-actions {
+            margin-top: 2rem;
+        }
+
+        /* Particle Animation */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: particleFloat 15s infinite linear;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .menu-bar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .menu-items {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .welcome-content {
+                padding: 2rem 1.5rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: var(--gradient);
+            z-index: 1000;
+            transition: width 0.3s ease;
+        }
+
+        /* Game Icons Animation */
+        .game-icons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .game-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--accent);
+            transition: var(--transition);
+            animation: iconBounce 2s infinite;
+        }
+
+        .game-icon:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .game-icon:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .game-icon:nth-child(4) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes iconBounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .game-icon:hover {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.1) rotate(10deg);
+        }
+
+        /* Footer Styles */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
+    <!-- Loading Bar -->
+    <div class="loading-bar" id="loadingBar"></div>
+
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="bg-circle"></div>
+        <div class="bg-circle"></div>
+        <div class="bg-circle"></div>
+        <div class="bg-circle"></div>
+    </div>
+
+    <!-- Particles -->
+    <div class="particles" id="particles"></div>
+
     <nav class="menu-bar">
         <div class="logo">GameZone</div>
         <div class="menu-items">
-            <a href="/" class="menu-item active">Home</a>
             <% if (user) { %>
-                <a href="/account" class="menu-item">Account</a>
-                <a href="/dashboard" class="menu-item">Dashboard</a>
-                <a href="/game" class="menu-item">Start Game</a>
-                <a href="/auth/logout" class="menu-item logout">Logout</a>
+                <a href="/account" class="menu-item"><i class="fas fa-user"></i> Account</a>
+                <!-- Dashboard link removed -->
+                <a href="/game" class="menu-item"><i class="fas fa-gamepad"></i> Start Game</a>
+                <a href="/auth/logout" class="menu-item logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
             <% } else { %>
-                <a href="/auth/login" class="menu-item">Login</a>
-                <a href="/auth/register" class="menu-item">Register</a>
-                <a href="/game" class="menu-item disabled" title="Please login to play">Start Game</a>
+             
+               
+                   <a href="/auth/login" class="menu-item"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="/auth/register" class="menu-item"><i class="fas fa-user-plus"></i> Register</a>
             <% } %>
         </div>
     </nav>
+    
     <div class="container">
         <h1>Welcome to GameZone</h1>
+
+        <!-- Top 5 High Score Users Table (Bigger Format) -->
+        <div style="margin: 2.5rem auto 3rem auto; max-width: 900px;">
+            <h2 style="color: #00cec9; margin-bottom: 1.5rem; font-size:2.5rem; letter-spacing:1px;">Top 5 High Scores</h2>
+            <table style="width:100%; border-collapse:separate; border-spacing:0; background:rgba(255,255,255,0.13); border-radius:18px; overflow:hidden; font-size:1.5rem; box-shadow:0 8px 32px rgba(44,62,80,0.15);">
+                <thead>
+                    <tr style="background: #6c5ce7; color: #fff; font-size:1.3em;">
+                        <th style="padding: 22px 18px; text-align:left;">Rank</th>
+                        <th style="padding: 22px 18px; text-align:left;">Username</th>
+                        <th style="padding: 22px 18px; text-align:left;">High Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (typeof topUsers !== 'undefined' && topUsers.length > 0) { %>
+                        <% topUsers.forEach(function(u, idx) { %>
+                            <tr style="border-bottom:2px solid #eee; background:<%= idx === 0 ? 'rgba(0,206,201,0.13)' : 'transparent' %>;">
+                                <td style="padding: 20px 18px; font-weight:bold; font-size:1.2em; color:#6c5ce7;">#<%= idx+1 %></td>
+                                <td style="padding: 20px 18px;"><%= u.username %></td>
+                                <td style="padding: 20px 18px; color:#00b894; font-weight:bold; font-size:1.2em; letter-spacing:1px;"> <%= u.highScore %> </td>
+                            </tr>
+                        <% }); %>
+                    <% } else { %>
+                        <tr><td colspan="3" style="padding: 20px; text-align:center; color:#888; font-size:1.1em;">No high scores yet.</td></tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+
+        <% if (user) { %>
+            <a href="/game" 
+                 class="menu-item"
+                 style="display:inline-block; margin:15px; padding:18px 40px; font-size:2rem; text-decoration:none; color:white; background-color:#007BFF; border-radius:12px; transition:0.3s;">
+                <i class="fas fa-gamepad"></i> Start Game
+            </a>
+
+            <a href="/questions" 
+                 class="menu-item"
+                 style="display:inline-block; margin:15px; padding:18px 40px; font-size:2rem; text-decoration:none; color:white; background-color:#888; border-radius:12px; transition:0.3s;">
+                <i class="fas fa-plus-circle"></i> Add Your Question
+            </a>
+        <% } else { %>
+            <a href="/game" 
+                 class="menu-item disabled" 
+                 title="Please login to play"
+                 style="display:inline-block; margin:15px; padding:18px 40px; font-size:2rem; text-decoration:none; color:white; background-color:#007BFF; border-radius:12px; transition:0.3s; cursor:not-allowed;">
+                <i class="fas fa-gamepad"></i> Start Game
+            </a>
+
+            <a href="/questions" 
+                 class="menu-item disabled" 
+                 title="Please login to play"
+                 style="display:inline-block; margin:15px; padding:18px 40px; font-size:2rem; text-decoration:none; color:white; background-color:#888; border-radius:12px; transition:0.3s; cursor:not-allowed;">
+                <i class="fas fa-plus-circle"></i> Add Your Question
+            </a>
+        <% } %>
+
+        <!-- Game Icons -->
+        <div class="game-icons">
+            <div class="game-icon"><i class="fas fa-dice"></i></div>
+            <div class="game-icon"><i class="fas fa-chess"></i></div>
+            <div class="game-icon"><i class="fas fa-puzzle-piece"></i></div>
+            <div class="game-icon"><i class="fas fa-robot"></i></div>
+        </div>
+
         <div class="welcome-content">
-            <p>Login or Register to start playing exciting games!</p>
+            <% if (!user) { %>
+                <p>Login or Register to start playing exciting games!</p>
+            <% } %>
+            <% if (user) { %>
+                <div class="home-actions">
+                    <a href="/questions" class="btn"><i class="fas fa-plus-circle"></i> Add Your Question</a>
+                </div>
+            <% } %>
         </div>
     </div>
+    
+    <footer>
+        <p>&copy; 2023 GameZone. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Loading animation
+        window.addEventListener('load', function() {
+            const loadingBar = document.getElementById('loadingBar');
+            loadingBar.style.width = '100%';
+            setTimeout(() => {
+                loadingBar.style.opacity = '0';
+                setTimeout(() => {
+                    loadingBar.style.display = 'none';
+                }, 300);
+            }, 500);
+        });
+
+        // Create particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random properties
+                const size = Math.random() * 5 + 2;
+                const posX = Math.random() * 100;
+                const delay = Math.random() * 15;
+                const duration = Math.random() * 10 + 10;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Initialize particles
+        createParticles();
+
+        // Add hover effect to menu items
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px)';
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Add typing effect to welcome message
+        const welcomeText = "Login or Register to start playing exciting games!";
+        let i = 0;
+        const typingEffect = setInterval(function() {
+            if (i < welcomeText.length) {
+                document.querySelector('.welcome-content p').textContent += welcomeText.charAt(i);
+                i++;
+            } else {
+                clearInterval(typingEffect);
+            }
+        }, 50);
+    </script>
 </body>
 </html>

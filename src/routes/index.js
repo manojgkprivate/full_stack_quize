@@ -21,14 +21,22 @@ const isAuthenticated = (req, res, next) => {
 };
 
 // Home page
-router.get('/', (req, res) => {
-    res.render('home', { user: req.session.user });
+// Home page with top 5 users by high score
+router.get('/', async (req, res) => {
+    try {
+        // Get top 5 users by highScore (descending)
+        const topUsers = await User.find({ highScore: { $gt: 0 } })
+            .sort({ highScore: -1 })
+            .limit(5)
+            .select('username highScore');
+        res.render('home', { user: req.session.user, topUsers });
+    } catch (err) {
+        console.error(err);
+        res.render('home', { user: req.session.user, topUsers: [] });
+    }
 });
 
-// Dashboard - Protected route
-router.get('/dashboard', isAuthenticated, (req, res) => {
-    res.render('dashboard', { user: req.session.user });
-});
+// Dashboard route removed (home and dashboard are the same)
 
 // Game page - Protected route
 router.get('/game', isAuthenticated, async (req, res) => {
@@ -188,6 +196,36 @@ router.get('/account', isAuthenticated, async (req, res) => {
             }
         }
         res.render('account', { user: user });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+});
+
+// Questions page (separate page for adding and listing user's questions)
+router.get('/questions', isAuthenticated, async (req, res) => {
+    try {
+        const user = await User.findById(req.session.user.id);
+        if (!user) return res.redirect('/auth/login');
+
+        // Ensure legacy fields are migrated (same logic as /account)
+        if ((user.image1 && user.image1.data) || (user.image2 && user.image2.data)) {
+            const hasQuestions = user.questions && user.questions.length;
+            if (!hasQuestions) {
+                const q = {
+                    image1: user.image1 && user.image1.data ? user.image1 : undefined,
+                    image2: user.image2 && user.image2.data ? user.image2 : undefined,
+                    answer: user.answer || undefined
+                };
+                user.questions = [q];
+                user.image1 = undefined;
+                user.image2 = undefined;
+                user.answer = undefined;
+                await user.save();
+            }
+        }
+
+        res.render('questions', { user });
     } catch (err) {
         console.error(err);
         res.status(500).send('Server Error');
