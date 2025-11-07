@@ -230,8 +230,8 @@
         /* Main Content Styles */
         .container {
             max-width: 1200px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
+            margin: 0rem auto; /* reduced top margin to bring content up */
+            padding: 1rem 2rem; /* reduced padding to tighten vertical space */
             text-align: center;
             position: relative;
             z-index: 1;
@@ -239,7 +239,7 @@
 
         h1 {
             font-size: 4rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem; /* smaller gap under heading */
             background: linear-gradient(to right, var(--primary), var(--accent), var(--secondary));
             -webkit-background-clip: text;
             background-clip: text;
@@ -307,6 +307,23 @@
 
         .home-actions {
             margin-top: 2rem;
+        }
+
+        /* Action row: Start / Title / Add Question inline */
+        .action-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.25rem;
+            flex-wrap: wrap;
+            margin: 1rem 0 1.5rem 0;
+        }
+        .action-row h2 {
+            margin: 0;
+            color: #00cec9;
+            font-size: 1.6rem;
+            letter-spacing: 1px;
+            font-weight: 600;
         }
 
         /* Particle Animation */
@@ -453,7 +470,9 @@
     <!-- Particles -->
     <div class="particles" id="particles"></div>
 
-    <nav class="menu-bar">
+    <nav class="menu-bar" style="
+    padding-bottom: 5px;
+    padding-top: 5px">
         <div class="logo">GameZone</div>
         <div class="menu-items">
             <% if (user) { %>
@@ -473,73 +492,84 @@
     <div class="container">
         <h1>Welcome to GameZone</h1>
 
-        <!-- Top 5 High Score Users Table (Bigger Format) -->
-        <div style="margin: 2.5rem auto 3rem auto; max-width: 900px;">
-            <h2 style="color: #00cec9; margin-bottom: 1.5rem; font-size:2.5rem; letter-spacing:1px;">Top 5 High Scores</h2>
-            <table style="width:100%; border-collapse:separate; border-spacing:0; background:rgba(255,255,255,0.13); border-radius:18px; overflow:hidden; font-size:1.5rem; box-shadow:0 8px 32px rgba(44,62,80,0.15);">
-                <thead>
-                    <tr style="background: #6c5ce7; color: #fff; font-size:1.3em;">
-                        <th style="padding: 22px 18px; text-align:left;">Rank</th>
-                        <th style="padding: 22px 18px; text-align:left;">Username</th>
-                        <th style="padding: 22px 18px; text-align:left;">High Score</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% if (typeof topUsers !== 'undefined' && topUsers.length > 0) { %>
-                        <% topUsers.forEach(function(u, idx) { %>
-                            <tr style="border-bottom:2px solid #eee; background:<%= idx === 0 ? 'rgba(0,206,201,0.13)' : 'transparent' %>;">
-                                <td style="padding: 20px 18px; font-weight:bold; font-size:1.2em; color:#6c5ce7;">#<%= idx+1 %></td>
-                                <td style="padding: 20px 18px;"><%= u.username %></td>
-                                <td style="padding: 20px 18px; color:#00b894; font-weight:bold; font-size:1.2em; letter-spacing:1px;"> <%= u.highScore %> </td>
-                            </tr>
-                        <% }); %>
-                    <% } else { %>
-                        <tr><td colspan="3" style="padding: 20px; text-align:center; color:#888; font-size:1.1em;">No high scores yet.</td></tr>
-                    <% } %>
-                </tbody>
-            </table>
-        </div>
+        <div class="action-row">
+            <% if (user) { %>
+                <a href="/game" 
+                     class="menu-item action-btn"
+                     style="display:inline-block; margin:0; padding:12px 28px; font-size:1.25rem; text-decoration:none; color:white; background-color:#007BFF; border-radius:10px; transition:0.3s;">
+                    <i class="fas fa-gamepad"></i> Start Game
+                </a>
 
-        <% if (user) { %>
-            <a href="/game" 
-                 class="menu-item"
-                 style="display:inline-block; margin:15px; padding:18px 40px; font-size:2rem; text-decoration:none; color:white; background-color:#007BFF; border-radius:12px; transition:0.3s;">
-                <i class="fas fa-gamepad"></i> Start Game
-            </a>
+                <h2>Top 5 High Scores</h2>
 
-            <a href="/questions" 
-                 class="menu-item"
-                 style="display:inline-block; margin:15px; padding:18px 40px; font-size:2rem; text-decoration:none; color:white; background-color:#888; border-radius:12px; transition:0.3s;">
-                <i class="fas fa-plus-circle"></i> Add Your Question
-            </a>
-        <% } else { %>
-            <a href="/game" 
-                 class="menu-item disabled" 
-                 title="Please login to play"
-                 style="display:inline-block; margin:15px; padding:18px 40px; font-size:2rem; text-decoration:none; color:white; background-color:#007BFF; border-radius:12px; transition:0.3s; cursor:not-allowed;">
-                <i class="fas fa-gamepad"></i> Start Game
-            </a>
+                <a href="/questions" 
+                     class="menu-item action-btn"
+                     style="display:inline-block; margin:0; padding:12px 28px; font-size:1.25rem; text-decoration:none; color:white; background-color:#888; border-radius:10px; transition:0.3s;">
+                    <i class="fas fa-plus-circle"></i> Add Your Question
+                </a>
+            <% } else { %>
+                <a href="/game" 
+                     class="menu-item disabled action-btn" 
+                     title="Please login to play"
+                     style="display:inline-block; margin:0; padding:12px 28px; font-size:1.25rem; text-decoration:none; color:white; background-color:#007BFF; border-radius:10px; transition:0.3s; cursor:not-allowed;">
+                    <i class="fas fa-gamepad"></i> Start Game
+                </a>
 
-            <a href="/questions" 
-                 class="menu-item disabled" 
-                 title="Please login to play"
-                 style="display:inline-block; margin:15px; padding:18px 40px; font-size:2rem; text-decoration:none; color:white; background-color:#888; border-radius:12px; transition:0.3s; cursor:not-allowed;">
-                <i class="fas fa-plus-circle"></i> Add Your Question
-            </a>
-        <% } %>
+                <h2>Top 5 High Scores</h2>
 
-        <!-- Game Icons -->
-        <div class="game-icons">
-            <div class="game-icon"><i class="fas fa-dice"></i></div>
-            <div class="game-icon"><i class="fas fa-chess"></i></div>
-            <div class="game-icon"><i class="fas fa-puzzle-piece"></i></div>
-            <div class="game-icon"><i class="fas fa-robot"></i></div>
-        </div>
-
-        <div class="welcome-content">
-            <% if (!user) { %>
-                <p>Login or Register to start playing exciting games!</p>
+                <a href="/questions" 
+                     class="menu-item disabled action-btn" 
+                     title="Please login to play"
+                     style="display:inline-block; margin:0; padding:12px 28px; font-size:1.25rem; text-decoration:none; color:white; background-color:#888; border-radius:10px; transition:0.3s; cursor:not-allowed;">
+                    <i class="fas fa-plus-circle"></i> Add Your Question
+                </a>
             <% } %>
+        </div>
+
+        <!-- Leaderboard with vertical side icons -->
+        <div class="leaderboard-row" style="margin: 2.5rem auto 3rem auto; max-width: 1100px; display:flex; align-items:center; gap:2rem;">
+            <div class="side-icons left" style="display:flex; flex-direction:column; gap:1rem; align-items:center;">
+                <div class="game-icon"><i class="fas fa-puzzle-piece"></i></div>
+                <div class="game-icon"><i class="fas fa-robot"></i></div>
+            </div>
+
+            <div class="leaderboard-center" style="flex:1;">
+                <div style="width:100%;">
+                    <table style="width:100%; border-collapse:separate; border-spacing:0; background:rgba(255,255,255,0.13); border-radius:18px; overflow:hidden; font-size:1.2rem; box-shadow:0 8px 32px rgba(44,62,80,0.15);">
+                        <thead>
+                            <tr style="background: #6c5ce7; color: #fff; font-size:1.1em;">
+                                <th style="padding: 18px 14px; text-align:left;">Rank</th>
+                                <th style="padding: 18px 14px; text-align:left;">Username</th>
+                                <th style="padding: 18px 14px; text-align:left;">High Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (typeof topUsers !== 'undefined' && topUsers.length > 0) { %>
+                                <% topUsers.forEach(function(u, idx) { %>
+                                    <tr class="leader-row <%= idx===0 ? 'leader-first' : '' %>">
+                                        <td style="padding: 14px 12px; font-weight:bold; font-size:1.05em; color:#6c5ce7;">#<%= idx+1 %></td>
+                                        <td style="padding: 14px 12px;"><%= u.username %></td>
+                                        <td style="padding: 14px 12px; color:#00b894; font-weight:bold; font-size:1.05em; letter-spacing:1px;"> <%= u.highScore %> </td>
+                                    </tr>
+                                <% }); %>
+                            <% } else { %>
+                                <tr><td colspan="3" style="padding: 14px; text-align:center; color:#888; font-size:1em;">No high scores yet.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="side-icons right" style="display:flex; flex-direction:column; gap:1rem; align-items:center;">
+                <div class="game-icon"><i class="fas fa-dice"></i></div>
+                <div class="game-icon"><i class="fas fa-chess"></i></div>
+            </div>
+        </div>
+
+        <!-- <div class="welcome-content"> -->
+            <!-- <% if (!user) { %>
+                <p>Login or Register to start playing excitsadasding games!</p>
+            <% } %> -->
             <% if (user) { %>
                 <div class="home-actions">
                     <a href="/questions" class="btn"><i class="fas fa-plus-circle"></i> Add Your Question</a>
