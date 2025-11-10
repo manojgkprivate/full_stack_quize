@@ -5,6 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Question</title>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        .images-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .plus-icon-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 1rem;
+        }
+
+        .plus-icon-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #6c5ce7, #00cec9);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+        }
+
+        .plus-icon-container i {
+            color: white;
+            transition: transform 0.3s ease;
+        }
+
+        .plus-icon-container:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.5);
+        }
+
+        .plus-icon-container:hover i {
+            transform: rotate(180deg);
+        }
+
+        .image-group {
+            flex: 1;
+            max-width: 45%;
+        }
+    </style>
  </head>
 <body>
     <nav class="menu-bar">
@@ -36,6 +85,13 @@
                             <input type="file" id="image1" name="image1" accept="image/*">
                         </div>
                     </div>
+                    
+                    <div class="plus-icon-wrapper">
+                        <div class="plus-icon-container">
+                            <i class="fas fa-plus fa-2x"></i>
+                        </div>
+                    </div>
+
                     <div class="image-group">
                         <h3>Image 2</h3>
                         <div class="preview-container">
