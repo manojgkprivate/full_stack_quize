@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultMessage = document.getElementById('result-message');
     const qNumber = document.getElementById('q-number');
     const qTotal = document.getElementById('q-total');
-    
+
     let score = 0;
     let currentIndex = -1;
     let gameData = [];
@@ -151,9 +151,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const resp = await fetch('/api/game/submit', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    score, 
-                    correct: correctCount, 
+                body: JSON.stringify({
+                    score,
+                    correct: correctCount,
                     total: selectedQuestions.length,
                     timeSpentSeconds: timeSpentSeconds
                 })
