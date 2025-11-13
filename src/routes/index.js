@@ -124,7 +124,7 @@ router.get('/api/images/:userId/:imageNum', async (req, res) => {
     }
 });
 
-// New API route to get question images by question id
+// New API route to get question images by question id - with caching and compression
 router.get('/api/questions/:userId/:questionId/:imageNum', async (req, res) => {
     try {
         const user = await User.findById(req.params.userId);
@@ -136,7 +136,15 @@ router.get('/api/questions/:userId/:questionId/:imageNum', async (req, res) => {
         const image = req.params.imageNum === '1' ? q.image1 : q.image2;
         if (!image || !image.data) return res.status(404).send('Image not found');
 
+        // Set caching headers for 7 days (604800 seconds)
+        res.set('Cache-Control', 'public, max-age=604800');
         res.set('Content-Type', image.contentType);
+        res.set('Content-Length', image.data.length);
+        
+        // Add ETag for browser caching
+        const etag = `"${Buffer.from(image.data).toString('base64').substring(0, 10)}"`;
+        res.set('ETag', etag);
+        
         res.send(image.data);
     } catch (err) {
         console.error(err);

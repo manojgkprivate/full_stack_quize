@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultMessage = document.getElementById('result-message');
     const qNumber = document.getElementById('q-number');
     const qTotal = document.getElementById('q-total');
+    const gameControls = document.getElementById('game-controls');
 
     let score = 0;
     let currentIndex = -1;
@@ -38,35 +39,58 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Load images for current user
-    async function loadNextQuestion() {
-        currentIndex++;
-        if (currentIndex >= selectedQuestions.length) {
-            // finished all selected questions
-            await finishGame();
-            return false;
-        }
-
-        const item = selectedQuestions[currentIndex];
-        image1.src = `/api/questions/${item.userId}/${item.questionId}/1`;
-        image2.src = `/api/questions/${item.userId}/${item.questionId}/2`;
-        currentAnswer = item.answer || '';
-        userAnswer.value = '';
-        resultMessage.innerHTML = '';
-        userAnswer.disabled = false;
-        // show the separate Check button and disable Next until checked
-        if (submitAnswer) {
-            submitAnswer.textContent = 'Check Answer';
-            submitAnswer.classList.remove('hidden');
-            submitAnswer.disabled = false;
-        }
-        nextPairButton.classList.remove('hidden');
-        nextPairButton.textContent = 'Next Question';
-        nextPairButton.disabled = true;
-        awaitingCheck = true;
-        // update question counter (1-based)
-        if (qNumber) qNumber.textContent = currentIndex + 1;
-        return true;
+   async function loadNextQuestion() {
+    currentIndex++;
+    if (currentIndex >= selectedQuestions.length) {
+        await finishGame();
+        return false;
     }
+
+    const item = selectedQuestions[currentIndex];
+
+    // Show loading state
+    image1.style.opacity = '0.5';
+    image2.style.opacity = '0.5';
+    resultMessage.innerHTML = '<p style="color: #666;">Loading question...</p>';
+
+    // Preload images properly and wait until both finish loading
+    const img1 = new Image();
+    const img2 = new Image();
+    img1.src = `/api/questions/${item.userId}/${item.questionId}/1`;
+    img2.src = `/api/questions/${item.userId}/${item.questionId}/2`;
+
+    await Promise.all([
+        new Promise(resolve => { img1.onload = resolve; img1.onerror = resolve; }),
+        new Promise(resolve => { img2.onload = resolve; img2.onerror = resolve; })
+    ]);
+
+    // Only update after both loaded
+    image1.src = img1.src;
+    image2.src = img2.src;
+    image1.style.opacity = '1';
+    image2.style.opacity = '1';
+    resultMessage.innerHTML = '';
+
+    // Now set up the answer state
+    currentAnswer = item.answer || '';
+    userAnswer.value = '';
+    userAnswer.disabled = false;
+
+    if (submitAnswer) {
+        submitAnswer.textContent = 'Check Answer';
+        submitAnswer.classList.remove('hidden');
+        submitAnswer.disabled = false;
+    }
+
+    nextPairButton.classList.remove('hidden');
+    nextPairButton.textContent = 'Next Question';
+    nextPairButton.disabled = true;
+    awaitingCheck = true;
+
+    if (qNumber) qNumber.textContent = currentIndex + 1;
+    return true;
+}
+
 
     // Start the game
     async function startGame() {
@@ -92,6 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentIndex = -1;
     startButton.classList.add('hidden');
     gameContent.classList.remove('hidden');
+    if (gameControls) gameControls.classList.remove('hidden');
     await loadNextQuestion();
     }
 
@@ -141,6 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const timeSpentSeconds = Math.floor((endTime - startTime) / 1000);
 
         gameContent.classList.add('hidden');
+        if (gameControls) gameControls.classList.add('hidden');
         resultMessage.innerHTML = `Game Over! Final Score: ${score}<br>Time: ${Math.floor(timeSpentSeconds/60)}m ${timeSpentSeconds%60}s<br>Correct Answers: ${correctCount}/${selectedQuestions.length}`;
         resultMessage.className = 'result-message';
         startButton.classList.remove('hidden');
